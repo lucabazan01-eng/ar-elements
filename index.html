@@ -2,18 +2,42 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Átomo AR sobre Marcador</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Átomo AR</title>
 
-  <!-- Librerías de AR.js y A-Frame -->
+  <!-- Carga de librerías -->
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.2/aframe/build/aframe-ar.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+  <!-- Estilos CSS para corregir el recorte de pantalla en celulares -->
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: fixed;
+    }
+    .arjs-video {
+      max-width: none !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      object-fit: cover !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+    }
+  </style>
 </head>
 <body style="margin: 0px; overflow: hidden;">
 
-  <a-scene embedded vr-mode-ui="enabled: false" arjs="sourceType: webcam; debugUIEnabled: false;">
+  <a-scene 
+    embedded 
+    vr-mode-ui="enabled: false" 
+    arjs="sourceType: webcam; debugUIEnabled: false;">
     
-    <!-- Luces para iluminar el modelo 3D -->
+    <!-- Luces para iluminar el modelo -->
     <a-light type="ambient" intensity="1.5"></a-light>
     <a-light type="directional" position="1 2 1" intensity="1"></a-light>
 
@@ -21,9 +45,8 @@
     <a-marker preset="hiro">
       <a-entity 
         id="modelo-3d"
-        gltf-model="" 
-        scale="0.1 0.1 0.1" 
-        position="0 0.5 0">
+        position="0 0.2 0"
+        scale="0.2 0.2 0.2">
       </a-entity>
     </a-marker>
 
@@ -31,13 +54,15 @@
   </a-scene>
 
   <script>
-    // Captura el parámetro de la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const elemento = urlParams.get('elem') || 'hidrogeno';
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Lee el parámetro de la URL (?elem=hidrogeno)
+      const urlParams = new URLSearchParams(window.location.search);
+      const elemento = urlParams.get('elem') || 'hidrogeno';
 
-    // Asigna la ruta del archivo .glb
-    const modelo = document.getElementById('modelo-3d');
-    modelo.setAttribute('gltf-model', `modelos/${elemento}.glb`);
+      // 2. Asigna la ruta con formato url() requerido por A-Frame
+      const modelo = document.getElementById('modelo-3d');
+      modelo.setAttribute('gltf-model', `url(modelos/${elemento}.glb)`);
+    });
   </script>
 
 </body>
