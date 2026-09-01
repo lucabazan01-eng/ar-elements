@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visor de Elementos 3D</title>
+  
+  <!-- Carga la librería de Google para visualizar modelos 3D y Realidad Aumentada -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+    }
+    model-viewer {
+      width: 100vw;
+      height: 100vh;
+    }
+    .interface {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 20px;
+      border-radius: 8px;
+      backdrop-filter: blur(5px);
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cartel flotante para mostrar el nombre del elemento -->
+  <div class="interface">
+    <h1 id="nombre-elemento" style="margin:0; font-size: 1.4rem;">Cargando...</h1>
+  </div>
+
+  <!-- Visor 3D y botón de Realidad Aumentada -->
+  <model-viewer 
+    id="visor-3d"
+    src="" 
+    alt="Modelo 3D del elemento" 
+    ar 
+    ar-modes="webxr scene-viewer quick-look" 
+    camera-controls 
+    auto-rotate>
+  </model-viewer>
+
+  <script>
+    // 1. Captura el parámetro de la URL (por ejemplo: ?elem=hidrogeno)
+    const urlParams = new URLSearchParams(window.location.search);
+    const elemento = urlParams.get('elem') || 'hidrogeno'; // Si no hay parámetro, usa 'hidrogeno' por defecto
+
+    // 2. Busca los elementos dentro del HTML
+    const visor = document.getElementById('visor-3d');
+    const titulo = document.getElementById('nombre-elemento');
+
+    // 3. Modifica la fuente del archivo .glb y el título dinámicamente
+    visor.src = `modelos/${elemento}.glb`;
+    titulo.textContent = elemento.toUpperCase();
+  </script>
+
+</body>
+</html>
